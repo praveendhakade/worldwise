@@ -15,6 +15,7 @@ jobs:
       - name: Linting
         run : npm run lint
   test:
+    needs: lint
     runs-on: windows-latest
     steps:
       - name: Get Code
