@@ -1,8 +1,8 @@
-import { createContext, useEffect, useContext, useReducer, useCallback } from "react";
+import { createContext, useEffect,  useReducer, useCallback } from "react";
 
 const BASE_URL = "http://localhost:8000";
 
-const CitiesContext = createContext();
+export const CitiesContext = createContext();
 
 const initialState = {
   cities: [],
@@ -140,10 +140,6 @@ const CitiesProvider = (prop) => {
     </CitiesContext.Provider>
 }
 
-const useCities = () => {
-    const context = useContext(CitiesContext);
-    if (context === undefined) throw new Error("Context use outside the provider")
-    return context;
-}
 
-export {CitiesProvider, useCities};
+
+export default CitiesProvider;
