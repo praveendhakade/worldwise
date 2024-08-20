@@ -4,10 +4,10 @@ import styles from "./Homepage.module.css";
 
 export default function Homepage() {
   return (
-    <main className={styles.homepage}>
+    <main className={styles?.homepage ? styles?.homepage : ''}>
       <PageNav />
       <section>
-        <h1>
+        <h1 data-testid="home.heading">
           You travel the world.
           <br />
           WorldWise keeps track of your adventures.
