@@ -1,0 +1,31 @@
+name: Deploy Project
+on: push
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Setup NodeJs
+        uses:  actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install dependecies
+        run: npm ci
+      - name: Runt tests
+        run : npm test
+  deploy:
+    runs-on: windows-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Setup NodeJs
+        uses:  actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install dependecies
+        run: npm ci
+      - name: Build Project
+        run : npm run build
+      - name: Deploy
+        run: echo "Deploying..."
