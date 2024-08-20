@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import styles from "./Login.module.css";
 
 import PageNav from "../components/navigation/PageNav";
-import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
+import { useAuth } from "../hooks/context-hooks";
 
 export default function Login() {
   // PRE-FILL FOR DEV PURPOSES

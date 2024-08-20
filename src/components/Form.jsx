@@ -11,17 +11,10 @@ import Button from "./Button";
 import ButtonBack from "./ui/ButtonBack";
 import Message from "./Message";
 import Spinner from "./Spinner";
-import { useCities } from "../contexts/CitiesContext";
 import { useNavigate } from "react-router-dom";
+import { convertToEmoji } from "../utils";
+import { useCities } from "../hooks/context-hooks";
 
-export function convertToEmoji(countryCode) {
-  const codePoints = countryCode
-    .toUpperCase()
-    .split("")
-    .map((char) => 127397 + char.charCodeAt(0));
-  // console.log(countryCode, String.fromCodePoint(...codePoints));
-  return String.fromCodePoint(...codePoints);
-}
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
