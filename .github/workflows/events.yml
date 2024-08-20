@@ -1,5 +1,8 @@
-name: Deployment Excercise
-on: workflow_dispatch
+name: Events Demo
+on:
+  pull_request:
+    types:
+      - opened
 jobs:
   deploy:
     runs-on: windows-latest
