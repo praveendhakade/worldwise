@@ -57,4 +57,4 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Deploy
-        run: echo "Deploying..."
+        run: echo "Deploying...."
