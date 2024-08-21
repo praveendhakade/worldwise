@@ -3,6 +3,19 @@ on:
   pull_request:
     types:
       - opened
+    branches:
+      - master
+      - dev-*
+      - feat/**
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - dev-*
+      - feat/**
+    paths-ignone:
+      - '.github/workflows/*'
+
 jobs:
   deploy:
     runs-on: windows-latest
