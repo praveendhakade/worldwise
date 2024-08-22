@@ -84,8 +84,8 @@ jobs:
           #   dist
           #   package.json
   deploy:
+    needs: [lint, build]
     if: failure()
-    needs: build
     runs-on: windows-latest
     steps:
       - name: Get Build Artifacts
