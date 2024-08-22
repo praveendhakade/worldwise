@@ -1,40 +1,72 @@
 name: Comosite Action Example
 on: push
 jobs:
-    lint:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Get Code
-              uses: actions/checkout@v4
-            - name: load and Cache dependencies
-              id: cache-deps
-              uses: ./.github/actions/cached-deps
-              with:
-                caching: 'false'
-            - name: Output Info
-              run: echo "Cache Used? ${{steps.cache-deps.outputs.used-cache}}"
-            - name: Lint code
-              run: npm run lint
-    test:
-        needs: lint
-        runs-on: ubuntu-latest
-        steps:
-            - name: Get Code
-              uses: actions/checkout@v4
-            - name: load and Cache dependencies
-              uses: ./.github/actions/cached-deps
-            - name: Test code
-              run: npm run test
-    deploy:
-        needs: test
-        runs-on: ubuntu-latest
-        steps:
-            - name: Deploy
-              run: echo "Deploy.. "
-    info:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Get Code
-              uses: actions/checkout@v4
-            - name: Run custom action
-              uses: ./.github/actions/deploy-s3-javascript
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: load and Cache dependencies
+        id: cache-deps
+        uses: ./.github/actions/cached-deps
+        with:
+          caching: "false"
+      - name: Output Info
+        run: echo "Cache Used? ${{steps.cache-deps.outputs.used-cache}}"
+      - name: Lint code
+        run: npm run lint
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: load and Cache dependencies
+        uses: ./.github/actions/cached-deps
+      - name: Test code
+        run: npm run test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: load and Cache dependencies
+        uses: ./.github/actions/cached-deps
+      - name: Build code
+        run: npm run build
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist
+      - name: Build
+        run: echo "Building.. "
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Get Build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: ./dist
+      - name: Output contents
+        run: ls
+      - name: Deploy
+        env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
+            AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+        uses: ./.github/actions/deploy-s3-javascript
+        with:
+            bucket: bucket:my-custom-js-actions-prac
+            dist-folder: ./dist
+  info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Run custom action
+        uses: ./.github/actions/deploy-s3-javascript
