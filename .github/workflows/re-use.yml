@@ -76,7 +76,7 @@ jobs:
     uses: ./.github/workflows/reusable.yml
   deploy:
     needs: [lint, build]
-    if: failure()
+    # if: failure()
     runs-on: windows-latest
     steps:
       - name: Get Build Artifacts
