@@ -63,10 +63,10 @@ jobs:
         with:
             bucket: bucket:my-custom-js-actions-prac
             dist-folder: ./dist
-  info:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get Code
-        uses: actions/checkout@v4
-      - name: Run custom action
-        uses: ./.github/actions/deploy-s3-javascript
+#   info:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Get Code
+#         uses: actions/checkout@v4
+#       - name: Run custom action
+#         uses: ./.github/actions/deploy-s3-javascript

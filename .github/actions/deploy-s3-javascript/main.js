@@ -10,7 +10,7 @@ function run() {
     // github.getOctokit
     // upload files
     const s3Uri = `s3://${bucket}` 
-    exec.exec(`aws S3 sync  ${distFolder} ${s3Uri} --region ${buckerRegion}`)
+    exec.exec(`aws s3 sync  ${distFolder} ${s3Uri} --region ${buckerRegion}`)
 
     core.notice("Hello custom js actions!")
 }
