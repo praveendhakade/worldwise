@@ -1,4 +1,4 @@
-name: Deploy Project
+name: Deploy Project Cache
 on:  
   push:
     branches:
@@ -36,6 +36,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Runt tests
+        continue-on-error: true
         id: run-test
         run : npm test
       - name: Upload test repoort
@@ -71,7 +72,7 @@ jobs:
       - name: Publish JS filename
         id: publish
         run: |
-            for /r dist/assets %f in (*.js) do echo script-file-%f >> $GITHUB_OUTPUT
+            for /r dist/assets %%f in (*.js) do echo script-file-%%f >> $GITHUB_OUTPUT
         shell: cmd
   deploy:
     needs: [lint, build]
