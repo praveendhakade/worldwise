@@ -69,6 +69,7 @@ jobs:
           for /r dist/assets %f in (*.js) do echo script-file-%f >> $GITHUB_OUTPUT
         shell: cmd
       - name: Upload Artifacts
+        if: steps.publish.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: dist-files

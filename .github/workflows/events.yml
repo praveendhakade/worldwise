@@ -10,11 +10,10 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+      - maste
       - dev-*
       - feat/**
-    paths-ignone:
-      - '.github/workflows/*'
+
 
 jobs:
   deploy:
