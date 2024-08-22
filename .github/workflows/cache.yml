@@ -1,25 +1,22 @@
 name: Deploy Project
-on:  workflow_dispatch
-  # push:
-  #   branches:
-  #     - master
+on:  
+  push:
+    branches:
+      - master
 jobs:
   lint:
       runs-on: windows-latest
       steps:
       - name: Get Code
         uses: actions/checkout@v4
-      - name: Setup NodeJs
-        uses:  actions/setup-node@v4
-      #   with:
-      #     node-version: 18
-      # - run: npm install
       - name: Cache dependencies
+        id: cache
         uses: actions/cache@v4
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependecies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Linting
         run : npm run lint
@@ -29,16 +26,14 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v4
-      - name: Setup NodeJs
-        uses:  actions/setup-node@v4
-      #   with:
-      #     node-version: 18
       - name: Cache dependencies
+        id: cache
         uses: actions/cache@v4
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependecies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Runt tests
         id: run-test
@@ -57,32 +52,27 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v4
-      - name: Setup NodeJs
-        uses:  actions/setup-node@v4
-      #   with:
-      #     node-version: 18
       - name: Cache dependencies
+        id: cache
         uses: actions/cache@v4
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependecies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build Project
         run : npm run build
-      - name: Publish JS filename
-        id: publish
-        run: |
-          for /r dist/assets in (*.js) do echo script-file-%f >> $GITHUB_OUTPUT
-        shell: cmd
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist-files
           path: dist
-          # path: |
-          #   dist
-          #   package.json
+      - name: Publish JS filename
+        id: publish
+        run: |
+            for /r dist/assets %f in (*.js) do echo script-file-%f >> $GITHUB_OUTPUT
+        shell: cmd
   deploy:
     needs: [lint, build]
     if: failure()
