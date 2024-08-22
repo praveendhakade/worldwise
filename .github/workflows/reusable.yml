@@ -15,5 +15,7 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                 name: ${{ inputs.artifact-name }}
+            - name: List 
+              run: ls
             - name: Output Information
               run: echo "Deploying % uploading.. "
