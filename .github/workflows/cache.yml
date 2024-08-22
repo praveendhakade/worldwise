@@ -1,8 +1,5 @@
 name: Deploy Project Cache
-on:  
-  push:
-    branches:
-      - master
+on: workflow_dispatch
 jobs:
   lint:
       runs-on: windows-latest

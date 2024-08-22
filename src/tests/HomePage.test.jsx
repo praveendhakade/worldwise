@@ -13,7 +13,7 @@ describe("Home Page", () => {
         ;
 
 
-        const heading1 = screen.getByTestId("home.heading1");
+        const heading1 = screen.getByTestId("home.heading");
         const heading2 = screen.getByTestId("home.heading2");
         expect(heading1).toBeInTheDocument();
         expect(heading2).toBeInTheDocument();
