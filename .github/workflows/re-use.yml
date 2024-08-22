@@ -1,0 +1,91 @@
+name: Reusing workflow
+on: push
+jobs:
+  lint:
+      runs-on: windows-latest
+      steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependecies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Linting
+        run : npm run lint
+  test:
+    needs: lint
+    runs-on: windows-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependecies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Runt tests
+        continue-on-error: true
+        id: run-test
+        run : npm test
+      - name: Upload test repoort
+        # if: failure() && steps.run-test.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: test.json
+  build:
+    needs: test
+    runs-on: windows-latest
+    outputs:
+      script-file: ${{ steps.publish.outputs.script-file }}
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependecies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Build Project
+        run : npm run build
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist
+      - name: Publish JS filename
+        id: publish
+        run: |
+            for /r dist/assets %%f in (*.js) do echo script-file-%%f >> $GITHUB_OUTPUT
+        shell: cmd
+  deployfirst:
+    needs: build
+    uses: ./.github/workflows/reusable.yml
+  deploy:
+    needs: [lint, build]
+    if: failure()
+    runs-on: windows-latest
+    steps:
+      - name: Get Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+      - name: Output contents
+        run: ls
+      - name: Output filename
+        run: echo "${{ needs.build.outputs.script-file }}"
+      - name: Deploy
+        run: echo "Deploying...."
