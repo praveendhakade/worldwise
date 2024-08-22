@@ -61,7 +61,7 @@ jobs:
             AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
         uses: ./.github/actions/deploy-s3-javascript
         with:
-            bucket: bucket:my-custom-js-actions-prac
+            bucket: my-custom-js-actions-prac
             dist-folder: ./dist
 #   info:
 #     runs-on: ubuntu-latest
