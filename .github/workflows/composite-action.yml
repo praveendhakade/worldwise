@@ -57,10 +57,10 @@ jobs:
         run: ls
       - name: Deploy
         id: deploy
+        uses: ./.github/actions/deploy-s3-docker
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
-            AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-        uses: ./.github/actions/deploy-s3-javascript
+            AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}} 
         with:
             bucket: my-custom-js-actions-prac
             dist-folder: ./dist
