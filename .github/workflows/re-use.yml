@@ -1,5 +1,5 @@
 name: Reusing workflow
-on: push
+on: workflow_dispatch
 jobs:
   lint:
     runs-on: windows-latest
@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-report
-          path: test.json
+          path: test
   build:
     needs: test
     runs-on: windows-latest

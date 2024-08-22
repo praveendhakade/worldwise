@@ -1,0 +1,17 @@
+name: Comosite Action Example
+on: push
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get Code
+              uses: actions/checkout@v4
+            - name: load and Cache dependencies
+              uses: ./.github/actions/cached-deps
+            - name: Lint code
+              run: npm run lint
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Deploy
+              run: echo "Deploy.. "
