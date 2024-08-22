@@ -84,6 +84,7 @@ jobs:
           #   dist
           #   package.json
   deploy:
+    if: failure()
     needs: build
     runs-on: windows-latest
     steps:
