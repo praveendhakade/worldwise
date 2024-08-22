@@ -11,7 +11,9 @@ inputs:
   dist-folder:
     description: 'The folder containing build files'
     required: true
-  
+outputs:
+  website-url:
+    description: 'The Url of website'
 runs:
   using: 'node16'
   main: 'main.js'

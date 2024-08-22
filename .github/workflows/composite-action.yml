@@ -56,6 +56,7 @@ jobs:
       - name: Output contents
         run: ls
       - name: Deploy
+        id: deploy
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
             AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
@@ -63,6 +64,9 @@ jobs:
         with:
             bucket: my-custom-js-actions-prac
             dist-folder: ./dist
+      - name: Output info
+        run: |
+            echo "Live Url ${{ steps.deploy.outputs.website-url }}"
 #   info:
 #     runs-on: ubuntu-latest
 #     steps:
