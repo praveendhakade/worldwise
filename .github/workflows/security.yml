@@ -5,6 +5,8 @@ on:
             - opened
 jobs:
     Check:
+        permissions:
+            issues: write
         runs-on: ubuntu-latest
         env:
             Title: ${{ github.event.issue.title}}
@@ -21,8 +23,8 @@ jobs:
               run: |
                 curl -X POST \
                 --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels \
-                -H 'authorization: Bearer ${{secrets.GITHUB_TOKEN }}' \
-                -H 'content-type: application/josn' \
+                -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+                -H 'content-type: application/json' \
                 -d '{
                     "labels": ["bug"]
                   }' \
